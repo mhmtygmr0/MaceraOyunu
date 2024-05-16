@@ -7,11 +7,13 @@ public class Player {
     private int money;
     private String name;
     private String charName;
+    private Inventory inventory;
 
     private Scanner input = new Scanner(System.in);
 
     public Player(String name) {
         this.name = name;
+        this.inventory = new Inventory();
     }
 
     public void selectChar() {
@@ -49,12 +51,8 @@ public class Player {
                     System.out.println("Hatalı ID numarası girdiniz Tekrar Deneyiniz !!!");
             }
 
-        } while (idNo > 3 || idNo < 1);
+        } while (idNo > idCount || idNo < 1);
 
-        System.out.println("Karakter: " + this.getCharName()
-                + " , " + "Hasar: " + this.getDamage()
-                + " , " + "Sağlık: " + this.getHealth()
-                + " , " + "Para: " + this.getMoney());
     }
 
     public void initPlayer(GameChar gameChar) {
@@ -64,8 +62,15 @@ public class Player {
         this.setCharName(gameChar.getName());
     }
 
+    public void printInfo(){
+        System.out.println("Silahınız : " + this.getInventory().getWeapon().getName()
+                + " , " + "Hasarınız : " + this.getDamage()
+                + " , " + "Sağlık: " + this.getHealth()
+                + " , " + "Para: " + this.getMoney());
+    }
+
     public int getDamage() {
-        return this.damage;
+        return this.damage + this.getInventory().getWeapon().getDamage();
     }
 
     public void setDamage(int damage) {
@@ -104,4 +109,11 @@ public class Player {
         this.charName = charName;
     }
 
+    public Inventory getInventory() {
+        return this.inventory;
+    }
+
+    public void setInventory(Inventory inventory) {
+        this.inventory = inventory;
+    }
 }
