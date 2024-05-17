@@ -79,30 +79,34 @@ public class ToolStore extends NormalLoc {
         for (int i = 0; i < Armor.armors().length; i++) {
             System.out.println(Armor.armors()[i].getId() + " - " + Armor.armors()[i].getName() + " , Para : " + Armor.armors()[i].getPrice() + " < Zırh : " + Armor.armors()[i].getBlock() + " >");
         }
+        System.out.println("0 - Çıkış Yap");
     }
 
     public void buyArmor() {
         System.out.print("Bir silah seçiniz : ");
         int selectArmorID = input.nextInt();
 
-        while (selectArmorID > Armor.armors().length || selectArmorID < 1) {
+        while (selectArmorID > Armor.armors().length || selectArmorID < 0) {
             System.out.print("Geçersiz değer girdiniz !! Tekrar giriniz : ");
             selectArmorID = input.nextInt();
         }
 
-        Armor selectedArmor = Armor.getArmorObjByID(selectArmorID);
+        if (selectArmorID != 0) {
+            Armor selectedArmor = Armor.getArmorObjByID(selectArmorID);
 
-        if (selectedArmor != null) {
-            if (selectedArmor.getPrice() > this.getPlayer().getMoney()) {
-                System.out.println("Yeterli paranız bulunmamaktadır !");
-            } else {
-                System.out.println(selectedArmor.getName() + " zırhını satın aldınız !");
-                int balance = this.getPlayer().getMoney() - selectedArmor.getPrice();
-                this.getPlayer().setMoney(balance);
-                System.out.println("Kalan Paranız : " + this.getPlayer().getMoney());
-                this.getPlayer().getInventory().setArmor(selectedArmor);
+            if (selectedArmor != null) {
+                if (selectedArmor.getPrice() > this.getPlayer().getMoney()) {
+                    System.out.println("Yeterli paranız bulunmamaktadır !");
+                } else {
+                    System.out.println(selectedArmor.getName() + " zırhını satın aldınız !");
+                    int balance = this.getPlayer().getMoney() - selectedArmor.getPrice();
+                    this.getPlayer().setMoney(balance);
+                    System.out.println("Kalan Paranız : " + this.getPlayer().getMoney());
+                    this.getPlayer().getInventory().setArmor(selectedArmor);
+                }
             }
         }
+
     }
 
 }
