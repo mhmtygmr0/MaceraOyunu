@@ -13,12 +13,16 @@ public class ToolStore extends NormalLoc {
         while (showMenu) {
             System.out.println("1 - Silahlar");
             System.out.println("2 - Zırhlar");
-            System.out.println("3 - Çıkış Yap");
+            System.out.println("0 - Çıkış Yap");
             int selectCase;
             do {
                 System.out.print("Seçiminiz : ");
                 selectCase = input.nextInt();
                 switch (selectCase) {
+                    case 0:
+                        System.out.println("Bir daha bekleriz !");
+                        showMenu = false;
+                        break;
                     case 1:
                         printWeapon();
                         buyWeapon();
@@ -27,14 +31,10 @@ public class ToolStore extends NormalLoc {
                         printArmor();
                         buyArmor();
                         break;
-                    case 3:
-                        System.out.println("Bir daha bekleriz !");
-                        showMenu = false;
-                        break;
                     default:
                         System.out.println("Geçersiz değer girdiniz !! Tekrar giriniz...");
                 }
-            } while (selectCase > 3 || selectCase < 1);
+            } while (selectCase > 2 || selectCase < 0);
         }
         return true;
     }
