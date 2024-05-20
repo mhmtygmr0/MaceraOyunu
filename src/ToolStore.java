@@ -83,7 +83,7 @@ public class ToolStore extends NormalLoc {
     }
 
     public void buyArmor() {
-        System.out.print("Bir silah seçiniz : ");
+        System.out.print("Bir zırh seçiniz : ");
         int selectArmorID = input.nextInt();
 
         while (selectArmorID > Armor.armors().length || selectArmorID < 0) {
