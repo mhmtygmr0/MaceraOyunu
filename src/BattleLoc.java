@@ -1,4 +1,3 @@
-import java.security.spec.RSAOtherPrimeInfo;
 import java.util.Random;
 
 public abstract class BattleLoc extends Location {
@@ -53,29 +52,58 @@ public abstract class BattleLoc extends Location {
     }
 
     public boolean combat(int obsNumber) {
+        Random rand = new Random();
+        boolean playerFirst = rand.nextBoolean(); // %50 şansla true veya false döndürür
+
         for (int i = 1; i <= obsNumber; i++) {
             this.getObstacle().setHealth(this.getObstacle().getOrjinalHealth());
             playStats();
             obstacleStats(i);
+
             while (this.getPlayer().getHealth() > 0 && this.getObstacle().getHealth() > 0) {
-                System.out.print("<V>ur veya <K>aç : ");
-                String selectCombat = input.nextLine().toUpperCase();
-                if (selectCombat.equals("V")) {
-                    System.out.println("Siz vurdunuz !");
-                    this.getObstacle().setHealth(this.getObstacle().getHealth() - this.getPlayer().getTotalDamage());
-                    afterHit();
-                    if (this.getObstacle().getHealth() > 0) {
-                        System.out.println();
-                        System.out.println("Canavar size vurdu !");
-                        int obstacleDamage = this.getObstacle().getDamage() - this.getPlayer().getInventory().getArmor().getBlock();
-                        if (obstacleDamage < 0) {
-                            obstacleDamage = 0;
-                        }
-                        this.getPlayer().setHealth(this.getPlayer().getHealth() - obstacleDamage);
+                if (playerFirst) {
+                    // Oyuncunun ilk hamlesi
+                    System.out.print("<V>ur veya <K>aç : ");
+                    String selectCombat = input.nextLine().toUpperCase();
+                    if (selectCombat.equals("V")) {
+                        System.out.println("Siz vurdunuz !");
+                        this.getObstacle().setHealth(this.getObstacle().getHealth() - this.getPlayer().getTotalDamage());
                         afterHit();
+                        if (this.getObstacle().getHealth() > 0) {
+                            System.out.println();
+                            System.out.println("Canavar size vurdu !");
+                            int obstacleDamage = this.getObstacle().getDamage() - this.getPlayer().getInventory().getArmor().getBlock();
+                            if (obstacleDamage < 0) {
+                                obstacleDamage = 0;
+                            }
+                            this.getPlayer().setHealth(this.getPlayer().getHealth() - obstacleDamage);
+                            afterHit();
+                        }
+                    } else {
+                        return false;
                     }
                 } else {
-                    return false;
+                    // Canavarın ilk hamlesi
+                    int obstacleDamage = this.getObstacle().getDamage() - this.getPlayer().getInventory().getArmor().getBlock();
+                    if (obstacleDamage < 0) {
+                        obstacleDamage = 0;
+                    }
+                    this.getPlayer().setHealth(this.getPlayer().getHealth() - obstacleDamage);
+                    afterHit();
+                    if (this.getPlayer().getHealth() > 0) {
+                        System.out.print("<V>ur veya <K>aç : ");
+                        String selectCombat = input.nextLine().toUpperCase();
+                        if (selectCombat.equals("V")) {
+                            System.out.println("Siz vurdunuz !");
+                            this.getObstacle().setHealth(this.getObstacle().getHealth() - this.getPlayer().getTotalDamage());
+                            afterHit();
+                        } else {
+                            return false;
+                        }
+                    } else {
+                        System.out.println("Öldünüz !");
+                        return false;
+                    }
                 }
             }
 
@@ -87,7 +115,6 @@ public abstract class BattleLoc extends Location {
             } else {
                 return false;
             }
-
         }
         return true;
     }
