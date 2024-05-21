@@ -5,30 +5,51 @@ public abstract class BattleLoc extends Location {
     private Obstacle obstacle;
     private String award;
     private int maxObstacle;
+    private boolean isCleared; // Yeni eklenen alan
 
     public BattleLoc(Player player, String name, Obstacle obstacle, String award, int maxObstacle) {
         super(player, name);
         this.obstacle = obstacle;
         this.award = award;
         this.maxObstacle = maxObstacle;
+        this.isCleared = false; // Başlangıçta bölge temizlenmemiş olarak işaretleniyor
     }
 
     @Override
     public boolean onLocation() {
-        int obsNumber = this.randomObstacleNumber();
-        System.out.println("Şuan buradasınız : " + this.getName());
-        System.out.println("Dikkatli Ol! Burada " + obsNumber + " tane " + this.getObstacle().getName() + " yaşıyor !");
-        System.out.print("<S>avaş veya <K>aç : ");
-        String selectCase = input.nextLine().toUpperCase();
-        if (selectCase.equals("S") && combat(obsNumber)) {
-            System.out.println(this.getName() + " tüm düşmaları yendiniz !");
-            return true;
+        if (!isCleared) { // Bölge daha önce temizlenmemişse savaşı gerçekleştir
+            int obsNumber = this.randomObstacleNumber();
+            System.out.println("Şuan buradasınız : " + this.getName());
+            System.out.println("Dikkatli Ol! Burada " + obsNumber + " tane " + this.getObstacle().getName() + " yaşıyor !");
+            System.out.print("<S>avaş veya <K>aç : ");
+            String selectCase = input.nextLine().toUpperCase();
+            if (selectCase.equals("S") && combat(obsNumber)) {
+                System.out.println(this.getName() + " tüm düşmanları yendiniz !");
+                isCleared = true; // Bölge temizlendiğinde işaretle
+            } else {
+                if (this.getPlayer().getHealth() <= 0) {
+                    System.out.println("Öldünüz !");
+                    return false;
+                }
+                return true;
+            }
         }
-        if (this.getPlayer().getHealth() <= 0) {
-            System.out.println("Öldünüz !");
-            return false;
+
+        // Bölge temizlendiyse ödülü ver
+        System.out.println("Bölge temizlendi, ödülünüz olan " + this.award + " envanterinize eklendi.");
+        switch (this.award) {
+            case "Food":
+                this.getPlayer().setHasFood(true);
+                break;
+            case "Firewood":
+                this.getPlayer().setHasFirewood(true);
+                break;
+            case "Water":
+                this.getPlayer().setHasWater(true);
+                break;
         }
         return true;
+
     }
 
     public boolean combat(int obsNumber) {
@@ -126,5 +147,7 @@ public abstract class BattleLoc extends Location {
     public void setMaxObstacle(int maxObstacle) {
         this.maxObstacle = maxObstacle;
     }
+
+
 
 }

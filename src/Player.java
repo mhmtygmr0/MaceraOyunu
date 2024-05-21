@@ -9,6 +9,9 @@ public class Player {
     private String name;
     private String charName;
     private Inventory inventory;
+    private boolean hasFood;
+    private boolean hasFirewood;
+    private boolean hasWater;
 
     private Scanner input = new Scanner(System.in);
 
@@ -138,5 +141,29 @@ public class Player {
 
     public void setInventory(Inventory inventory) {
         this.inventory = inventory;
+    }
+
+    public boolean isHasFood() {
+        return hasFood;
+    }
+
+    public void setHasFood(boolean hasFood) {
+        this.hasFood = hasFood;
+    }
+
+    public boolean isHasFirewood() {
+        return hasFirewood;
+    }
+
+    public void setHasFirewood(boolean hasFirewood) {
+        this.hasFirewood = hasFirewood;
+    }
+
+    public boolean isHasWater() {
+        return hasWater;
+    }
+
+    public void setHasWater(boolean hasWater) {
+        this.hasWater = hasWater;
     }
 }
